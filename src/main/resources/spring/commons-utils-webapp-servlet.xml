@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+  xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:aop="http://www.springframework.org/schema/aop" xmlns:mvc="http://www.springframework.org/schema/mvc"
+  xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd">
+
+  <context:component-scan base-package="com.newshunt" use-default-filters="false">
+    <context:include-filter type="annotation"
+                            expression="org.springframework.stereotype.Controller" />
+  </context:component-scan>
+  <aop:aspectj-autoproxy />
+
+  <mvc:annotation-driven
+    content-negotiation-manager="contentNegotiationManager">
+    <mvc:message-converters>
+      <!-- refer mapper configurations: http://docs.spring.io/spring-boot/docs/current/reference/html/howto-spring-mvc.html -->
+      <bean
+        class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+        <property name="objectMapper">
+          <bean class="com.fasterxml.jackson.databind.ObjectMapper">
+            <property name="serializationInclusion">
+              <value
+                type="com.fasterxml.jackson.annotation.JsonInclude.Include">NON_NULL</value>
+            </property>
+          </bean>
+        </property>
+      </bean>
+
+      <bean
+        class="org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter">
+        <property name="objectMapper">
+          <bean class="com.fasterxml.jackson.dataformat.xml.XmlMapper" />
+        </property>
+      </bean>
+    </mvc:message-converters>
+  </mvc:annotation-driven>
+
+  <bean id="contentNegotiationManager"
+    class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+    <property name="favorPathExtension" value="false" />
+    <property name="favorParameter" value="true" />
+    <property name="ignoreAcceptHeader" value="true" />
+    <property name="defaultContentType" value="application/json" />
+    <property name="mediaTypes">
+      <value>
+        json=application/json
+        xml=application/xml
+      </value>
+    </property>
+  </bean>
+
+  <!-- Declare the Interceptor -->
+  <mvc:interceptors>
+    <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"
+      p:paramName="locale" />
+  </mvc:interceptors>
+
+  <!-- Declare the Resolver -->
+  <bean id="localeResolver"
+    class="org.springframework.web.servlet.i18n.SessionLocaleResolver" />
+</beans>
