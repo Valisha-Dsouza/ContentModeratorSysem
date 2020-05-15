@@ -11,7 +11,7 @@
 	<properties>
 		<aspectj.version>1.8.13</aspectj.version>
 		<cglib-nodep.version>3.2.5</cglib-nodep.version>
-		<fasterxml.jackson.version>2.9.4</fasterxml.jackson.version>
+		<fasterxml.jackson.version>2.11.0</fasterxml.jackson.version>
 		<jackson-mapper-asl.version>1.9.13</jackson-mapper-asl.version>
 		<log4j.version>2.9.1</log4j.version>
 		<slf4j.version>1.7.7</slf4j.version>
